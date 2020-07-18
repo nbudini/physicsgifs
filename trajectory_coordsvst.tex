@@ -1,0 +1,42 @@
+\documentclass[tikz]{standalone}
+\usepackage{cmbright}
+\usepackage[T1]{fontenc}
+\usepackage{tikz,physics,ifthen,pgf,pgfplots}
+\usetikzlibrary{patterns}
+\pgfplotsset{compat=1.16}
+%\tikzexternalize[optimize=false]
+\begin{document}
+% set axis width and height
+\def\axisdefaultwidth{10cm}
+\def\axisdefaultheight{3.5cm}
+% configure fonts
+\pgfplotsset{tick label style={
+			font=\footnotesize},
+						label style={
+						font=\small
+}}
+\foreach \i in {1,...,80} { % t ranges from 0 to 80 time units
+\def\dom{\i} % set \dom (plot domain) value to actual t value from loop
+\begin{tikzpicture} % create TikZ figure
+\matrix {
+% plot x(t)
+\begin{axis}[xtick=\empty,ytick distance=1,ymin=-2,ymax=2,ylabel=$x(t)$,xmin=0,xmax=80,grid=major]
+\addplot[domain=0:\dom,samples=250,blue!70,very thick] {x/50.*cos(deg(x))};
+\end{axis}
+\\
+% plot y(t)
+\begin{axis}[xtick=\empty,ytick distance=25,ymin=0,ymax=100,ylabel=$y(t)$,xmin=0,xmax=80,grid=major]
+\addplot [domain=0:\dom,blue!70,very thick] {x};
+\end{axis}
+\\
+% plot z(t)
+\begin{axis}[xtick=\empty,ytick distance=1,ymin=-2,ymax=2,ylabel=$z(t)$,xmin=0,xmax=80,grid=major]
+\addplot [domain=0:\dom,samples=250,blue!70,very thick] {x/50.*sin(deg(x))};
+\end{axis}
+\\
+};
+% draw time arrow
+\draw[-latex] (0,-3.6) --++ (0:1) node[right] {\small $t$};
+\end{tikzpicture}
+}
+\end{document}
