@@ -1,0 +1,58 @@
+\documentclass[tikz]{standalone}
+\usepackage{cmbright}
+\usepackage[T1]{fontenc}
+\usepackage{tikz,physics,ifthen,pgf,pgfplots}
+\usetikzlibrary{patterns}
+\pgfplotsset{compat=1.16}
+%\tikzexternalize[optimize=false]
+\begin{document}
+\foreach \t in {1,...,80} { % t ranges from 0 to 80 time units
+\def\dom{\t} % set \dom (plot domain) value to actual t value from loop
+\begin{tikzpicture} % create TikZ figure
+\begin{axis}[view={60}{40},
+xmin=-2,
+xmax=2,
+ymin=0,
+ymax=100,
+zmin=-2,
+zmax=2,
+xlabel=$x$,
+ylabel=$y$,
+zlabel=$z$
+]
+
+% plot z(y) projected trajectory
+\addplot3 [blue,thick,domain=0:\dom,samples=380,samples y=0]
+ ({x/50.*cos(deg(x))},
+ {100},
+ {x/50.*sin(deg(x))});
+
+% plot x(y) projected trajectory
+ \addplot3 [purple,thick,domain=0:\dom,samples=380,samples y=0]
+ ({x/50.*cos(deg(x))},
+ {x},
+ {-2});
+
+% plot z(x) projected trajectory
+ \addplot3 [green!50!black,thick,domain=0:\dom,samples=380,samples y=0]
+ ({-2},
+ {x},
+ {{x/50.*sin(deg(x))}});
+
+% plot real trajectory
+ \addplot3 [red,thick,domain=0:\dom,samples=380,samples y=0]
+ (
+ {x/50*cos(deg(x))},
+ {x},
+ {x/50*sin(deg(x))}
+ );
+\end{axis}
+
+% annotations
+\node[red,rotate=-5] at (1.7,2) {\scriptsize trajectory};
+\node[green!50!black,rotate=14] at (2,5.4) {\scriptsize projected $z(x)$ trajectory};
+\node[blue,rotate=-39] at (5.8,4.9) {\scriptsize projected $z(y)$ trajectory};
+\node[purple,rotate=14] at (4.5,0.75) {\scriptsize projected $x(y)$ trajectory};
+\end{tikzpicture}
+}
+\end{document}
